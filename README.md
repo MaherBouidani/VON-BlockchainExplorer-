@@ -7,7 +7,7 @@ Instructions:
 
 # BCOVRIN to Google Sheets Connector
 
-## Install Instructions
+
 
 1. Install `pipenv` from https://github.com/pypa/pipenv
 
