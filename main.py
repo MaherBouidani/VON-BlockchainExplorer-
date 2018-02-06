@@ -141,9 +141,23 @@ def update_sheets():
 
         elif entity_type == "102": 
             
-            ClaimDef = content['signature'] if 'signature' in content else "" 
+           
             Ref = content['ref'] if 'ref' in content else ""
             reqId = content['reqId'] if 'reqId' in content else ""
+            DID_NAME_MAP = {
+                'V4SGRU86Z58d6TV7PBUe6f': 'Truste',
+                '2dTaSgHtQ8ZNZ5GLqomauU': 'Worksafe BC',
+                'K81nomphZemfm6iwothDD8': 'City of Surrey',
+                '7VkdE3erBDJnrQMVbEnRzg': 'BC Registries',
+                '8BaVQQW6WkRQ2p1gY1FG3A': 'Fraser Valley Health Authority',
+                '4uh1DP9AZcoYa5usCKoq83': 'Liquor Licensing',
+                '6ksN1bSHrwa3ZuHVLYcbjq': 'Ministry of Finance',
+                '6rcjxpqmmubVRWDdvbEvRc': 'TheOrgBook Issuer',
+                'T9vgKTDNiiEbjrFu5fx8gF': 'TheOrgBook Verifier',
+                'LfceHugWHnzZMhy92TbcbV': 'TheOrgBook Holder',
+                }
+
+            current_label = DID_NAME_MAP[Label] if Label in DID_NAME_MAP else Label
                     
             for line in ledger_response.text.split('\n'):
                 try:
@@ -160,27 +174,9 @@ def update_sheets():
                     #Schema = related_content['data']['name'] and related content['data']['version']: if 'data' in related_content else ""
                     if 'data' in related_content:
                         Schema = 'Name:' + related_content['data']['name'] + '\n' + 'Version:' + related_content['data']['version']
-                    
+                        ClaimDef = current_label + '\n' + related_content['data']['name']
                     #related_schema_version = related_content['data']['version'] if 'data' in related_content else ""
-                    #Schema = related_schema_name + related_schema_version
-
-                        
-
-            DID_NAME_MAP = {
-                'V4SGRU86Z58d6TV7PBUe6f': 'Truste',
-                '2dTaSgHtQ8ZNZ5GLqomauU': 'Worksafe BC',
-                'K81nomphZemfm6iwothDD8': 'City of Surrey',
-                '7VkdE3erBDJnrQMVbEnRzg': 'BC Registries',
-                '8BaVQQW6WkRQ2p1gY1FG3A': 'Fraser Valley Health Authority',
-                '4uh1DP9AZcoYa5usCKoq83': 'Liquor Licensing',
-                '6ksN1bSHrwa3ZuHVLYcbjq': 'Ministry of Finance',
-                '6rcjxpqmmubVRWDdvbEvRc': 'TheOrgBook Issuer',
-                'T9vgKTDNiiEbjrFu5fx8gF': 'TheOrgBook Verifier',
-                'LfceHugWHnzZMhy92TbcbV': 'TheOrgBook Holder',
-                }
-
-            current_label = DID_NAME_MAP[Label] if Label in DID_NAME_MAP else Label
-                                
+                    #Schema = related_schema_name + related_schema_version                  
             row = [str(current_label), str(Schema), str(ClaimDef), str(Ref), str(reqId)]
             body = {'values': [row]}
             
@@ -192,6 +188,7 @@ def update_sheets():
                 content['type'], counter_sheet_2, counter_sheet_2),
             body=body,
             valueInputOption="RAW").execute()
+
             counter_sheet_2 += 1 
 
             #legal_name = ...
