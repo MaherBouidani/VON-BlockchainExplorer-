@@ -3,6 +3,7 @@ import json
 import time
 from httplib2 import Http
 import os
+import sys
 
 import requests
 from apiclient import discovery
@@ -213,8 +214,9 @@ def update_sheets():
 def main():
     while(True):
         update_sheets()
-        time.sleep(20)
-
+        time.sleep(5)
+        sys.exit(0)
+    
 
 if __name__ == '__main__':
     main()
